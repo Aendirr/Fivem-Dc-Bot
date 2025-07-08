@@ -55,7 +55,6 @@ class ServerCommands(commands.Cog):
 
     @app_commands.command(name="ip", description="Sunucu IP adresini gösterir")
     async def ip(self, interaction: discord.Interaction):
-        # Whitelist rolü kontrolü
         whitelist_role = discord.utils.get(interaction.guild.roles, name=self.config['whitelist_role'])
         if not whitelist_role or whitelist_role not in interaction.user.roles:
             await interaction.response.send_message('Rolü olmayanlar ip talebinde bulunamaz!', ephemeral=True)

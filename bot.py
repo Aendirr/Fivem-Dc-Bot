@@ -5,22 +5,16 @@ import asyncio
 import os
 from utils.helpers import load_config
 
-# Config dosyasını yükle
 config = load_config()
 
-# Bot ayarları
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=config['prefix'], intents=intents)
 
-# Bot'a config'i ekle
 bot.config = config
 
-# Ticket verilerini saklamak için
 bot.ticket_data = {}
 
 async def load_extensions():
-    """Tüm extension'ları yükler"""
-    # Events yükle
     for filename in os.listdir('./events'):
         if filename.endswith('.py') and not filename.startswith('__'):
             try:
@@ -29,7 +23,6 @@ async def load_extensions():
             except Exception as e:
                 print(f'❌ Event yüklenemedi {filename}: {e}')
     
-    # Cogs yükle
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py') and not filename.startswith('__'):
             try:
@@ -43,18 +36,15 @@ async def on_ready():
     print(f'{bot.user} olarak giriş yapıldı!')
     print(f'Bot ID: {bot.user.id}')
     print(f'Guild sayısı: {len(bot.guilds)}')
-    
-    # Hızlı test için sadece bir sunucuya özel sync
-    GUILD_ID = 123456789012345678  # Örnek sunucu ID'si, kendi sunucu ID'nizle değiştirin
+
     try:
-        guild = discord.Object(id=GUILD_ID)
+        guild = discord.Object(id=config['guild_id'])
         synced = await bot.tree.sync(guild=guild)
-        print(f"{len(synced)} komut {GUILD_ID} sunucusunda senkronize edildi.")
+        print(f"{len(synced)} komut {config['guild_id']} sunucusunda senkronize edildi.")
     except Exception as e:
         print(f"Komut senkronizasyon hatası: {e}")
 
 async def main():
-    """Ana fonksiyon"""
     async with bot:
         await load_extensions()
         await bot.start(config['token'])

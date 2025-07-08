@@ -13,25 +13,21 @@ class MemberEvents(commands.Cog):
         """Üye sunucuya katıldığında çalışır"""
         date_format = "%x, %X"
         
-        # Oto rol ver
         rol_id = int(self.config['ticket_user_role_id'])
         rol = member.guild.get_role(rol_id)
         new_name = "IC/OOC ISIM"
         avatar_url = member.avatar.url if member.avatar else member.default_avatar.url
         
-        # Giriş embed'i oluştur
         girisembed = discord.Embed(title=f"discord id : {member.id}")
         girisembed.set_thumbnail(url=avatar_url)
         girisembed.set_author(name=member.name, icon_url=avatar_url)
         girisembed.add_field(name="Hesap Kuruluş Tarihi: ", value=member.created_at.strftime(date_format))
         girisembed.set_footer(text=f"{member.guild.name}", icon_url=avatar_url)
         
-        # Giriş kanalına gönder
         giriskanal = self.bot.get_channel(int(self.config['giris_channel_id']))
         if giriskanal:
             await giriskanal.send(member.mention, embed=girisembed)
         
-        # Rol ver ve isim değiştir
         if rol:
             await member.add_roles(rol)
         await member.edit(nick=new_name)
@@ -46,7 +42,6 @@ class MemberEvents(commands.Cog):
         membercikistarihi = membercikis.strftime("%x, %X")
         avatar_url = member.avatar.url if member.avatar else member.default_avatar.url
         
-        # Çıkış embed'i oluştur
         cikisembed = discord.Embed(title=f"Bir Kullanıcı Sunucudan Çıktı")
         cikisembed.set_author(name=f"{member.name}#{member.discriminator}", icon_url=avatar_url)
         cikisembed.set_thumbnail(url=avatar_url)
@@ -54,7 +49,6 @@ class MemberEvents(commands.Cog):
         cikisembed.add_field(name="Kullanıcı Bilgileri:", value=f"{member.name}#{member.discriminator}  -  {member.id}", inline=False)
         cikisembed.set_footer(text=f"{member.guild.name}", icon_url=f"{member.guild.icon.url}")
         
-        # Çıkış kanalına gönder
         cikiskanal = self.bot.get_channel(int(self.config['cikis_channel_id']))
         if cikiskanal:
             await cikiskanal.send(member.mention, embed=cikisembed)
@@ -67,12 +61,10 @@ class MemberEvents(commands.Cog):
         if message.author.bot:
             return
         
-        # Ticket kanalı ise ve data varsa kaydet
         if message.channel.name.startswith(self.config['ticket_channel_prefix']):
             user_id = None
             ticket_id = message.channel.id
             
-            # Ticket sahibini bul
             for uid, data in self.bot.ticket_data.items():
                 if 'interaction' in data and data['interaction'].channel.id == ticket_id:
                     user_id = uid
@@ -86,14 +78,12 @@ class MemberEvents(commands.Cog):
                     "timestamp": str(message.created_at)
                 })
         
-        # Kayıt kanalı kontrolü
         if message.channel.id == int(self.config['kayit_channel_id']) and not message.author.bot:
             await self.handle_registration(message)
         
         await self.bot.process_commands(message)
 
     async def handle_registration(self, message):
-        """Kayıt kanalında mesaj gönderildiğinde çalışır"""
         isim_soyisim = message.content.strip()
         
         if len(isim_soyisim.split()) < 2:
@@ -101,7 +91,6 @@ class MemberEvents(commands.Cog):
             return
 
         try:
-            # Kullanıcı adını güncelle
             await message.author.edit(nick=isim_soyisim)
             
             guild = message.guild

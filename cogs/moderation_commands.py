@@ -26,7 +26,6 @@ class ModerationCommands(commands.Cog):
             
             await interaction.response.send_message(f"✅ {user.mention} başarıyla kayıt edildi!", ephemeral=True)
             
-            # Log kanalına gönder
             log_channel = self.bot.get_channel(int(self.config['log_channel_id']))
             if log_channel:
                 await log_channel.send(f"<@!{interaction.user.id}> isimli yetkili , {user.mention} isimli Oyuncuya {rol.name if rol else 'rol'} permi verdi!")
@@ -47,7 +46,6 @@ class ModerationCommands(commands.Cog):
                 await user.add_roles(rol)
                 await interaction.response.send_message(f"✅ {user.mention} kullanıcısına {rol.name} rolü verildi!", ephemeral=True)
                 
-                # Log kanalına gönder
                 log_channel = self.bot.get_channel(int(self.config['log_channel_id']))
                 if log_channel:
                     await log_channel.send(f"<@!{interaction.user.id}> isimli yetkili , {user.mention} isimli Oyuncuya {rol.name} permi verdi!")
@@ -65,14 +63,12 @@ class ModerationCommands(commands.Cog):
             return
         
         try:
-            # Erkek rolü config'de tanımlı değilse varsayılan bir rol kullan
-            erkek_role_name = "Erkek"  # Config'e eklenebilir
+            erkek_role_name = "Erkek"
             rol = discord.utils.get(interaction.guild.roles, name=erkek_role_name)
             if rol:
                 await user.add_roles(rol)
                 await interaction.response.send_message(f"✅ {user.mention} kullanıcısına {rol.name} rolü verildi!", ephemeral=True)
                 
-                # Log kanalına gönder
                 log_channel = self.bot.get_channel(int(self.config['log_channel_id']))
                 if log_channel:
                     await log_channel.send(f"<@!{interaction.user.id}> isimli yetkili , {user.mention} isimli Oyuncuya {rol.name} permi verdi!")
@@ -90,7 +86,7 @@ class ModerationCommands(commands.Cog):
             return
         
         try:
-            rol_id = int(self.config['admin_role_id'])  # Whitelist rolü
+            rol_id = int(self.config['admin_role_id'])
             rol2 = discord.utils.get(interaction.guild.roles, name=self.config['kayitsiz_role'])
             rol = user.guild.get_role(rol_id)
             
@@ -106,7 +102,6 @@ class ModerationCommands(commands.Cog):
                 
                 await interaction.response.send_message(f"✅ {user.mention} kullanıcısının ismi '{new_nickname}' olarak değiştirildi!", ephemeral=True)
                 
-                # Log kanalına gönder
                 log_channel = self.bot.get_channel(int(self.config['log_channel_id']))
                 if log_channel:
                     await log_channel.send(f"<@!{interaction.user.id}> isimli yetkili , bu discord idye sahip kullanıcının: {user.id} ismini {user.mention} verdi! Ve {rol.name if rol else 'rol'} verildi..")
@@ -146,11 +141,9 @@ class ModerationCommands(commands.Cog):
             return
         
         try:
-            # Silinecek kanalı bul
             channel = discord.utils.get(interaction.guild.channels, name=channel_name)
             
             if channel is not None:
-                # Kanalı sil
                 await channel.delete()
                 await interaction.response.send_message(f"✅ {channel_name} kanalı başarıyla silindi.", ephemeral=True)
             else:

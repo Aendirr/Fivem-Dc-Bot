@@ -25,12 +25,10 @@ class MulakatModal(discord.ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction):
         user_id = str(interaction.user.id)
-        # Kullanıcıya özel cevapları başlat
         if not hasattr(interaction.client, 'mulakat_responses'):
             interaction.client.mulakat_responses = {}
         if user_id not in interaction.client.mulakat_responses or self.page_index == 0:
             interaction.client.mulakat_responses[user_id] = []
-        # Cevapları kaydet
         responses = {}
         for i, question in enumerate(self.questions):
             responses[question] = self.children[i].value
@@ -38,12 +36,10 @@ class MulakatModal(discord.ui.Modal):
             "page": self.page_index + 1,
             "responses": responses
         }
-        # Aynı sayfa tekrar submit edilirse üzerine yazmasın diye kontrol
         if len(interaction.client.mulakat_responses[user_id]) == self.page_index:
             interaction.client.mulakat_responses[user_id].append(page_data)
         else:
             interaction.client.mulakat_responses[user_id][self.page_index] = page_data
-        # Sonraki sayfa var mı?
         total_pages = 4
         if self.page_index < total_pages - 1:
             view = MulakatContinueView(self.page_index + 1, self.config)
@@ -67,7 +63,6 @@ class MulakatModal(discord.ui.Modal):
             json.dump(final_data, f, ensure_ascii=False, indent=2)
         mulakat_channel_id = int(self.config.get('mulakat_channel_id', '1388307897099878410'))
         channel = interaction.guild.get_channel(mulakat_channel_id)
-        # --- Embed ile okunabilir gönderim ---
         if channel:
             try:
                 embed = discord.Embed(

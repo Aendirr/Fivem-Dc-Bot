@@ -12,14 +12,12 @@ class ReadyEvent(commands.Cog):
     async def on_ready(self):
         print(f'{self.bot.user} olarak giriş yapıldı!')
         
-        # Komutları senkronize et
         try:
             synced = await self.bot.tree.sync()
             print(f"{len(synced)} komut global olarak senkronize edildi.")
         except Exception as e:
             print(f"Komut senkronizasyon hatası: {e}")
         
-        # Ses kanalına bağlan
         channel_id = int(self.config['ses_channel_id'])
         channel = self.bot.get_channel(channel_id)
         if channel:
@@ -29,11 +27,9 @@ class ReadyEvent(commands.Cog):
             except Exception as e:
                 print(f"Ses kanalına bağlanma hatası: {e}")
         
-        # Durum değiştirme görevini başlat
         self.bot.loop.create_task(self.change_presence())
 
     async def change_presence(self):
-        """Bot durumunu periyodik olarak değiştirir"""
         await self.bot.wait_until_ready()
         
         statuses = [
