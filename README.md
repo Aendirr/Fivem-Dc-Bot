@@ -1,153 +1,153 @@
-# Discord Ticket & Mülakat Botu - Modüler Yapı
+# Discord Ticket & Interview Bot - Modular Structure
 
-Bu bot, Discord sunucuları için gelişmiş bir ticket sistemi, mülakat (başvuru) sistemi ve moderasyon araçları sağlar. Modüler yapıda tasarlanmıştır ve kolayca genişletilebilir.
+This bot provides an advanced ticket system, interview (application) system, and moderation tools for Discord servers. It is designed in a modular structure and can be easily extended.
 
-## Özellikler
+## Features
 
-### 🎫 Ticket Sistemi
-- Modal tabanlı ticket oluşturma
-- Ceza menüsü ile rol yönetimi
-- Ticket transkripti kaydetme
-- Otomatik kanal yönetimi
+### 🎫 Ticket System
+- Modal-based ticket creation
+- Role management with penalty menu
+- Save ticket transcript
+- Automatic channel management
 
-### 📝 Mülakat (Başvuru) Sistemi
-- Slash komutuyla mülakat başlatma (`/mülakat`)
-- 20 adet Hard RP sorusu, 4 sayfa halinde modal ile cevaplanır
-- Cevaplar embed olarak okunabilir şekilde log kanalına gönderilir
-- Cevaplar JSON olarak arşivlenir (sadece dosyada, kanala gönderilmez)
-- Mülakat tamamlanınca kullanıcıya "onay bekleme" rolü verilir, eski rolü alınır
-- Sadece belirli role sahip kullanıcılar mülakat başlatabilir
+### 📝 Interview (Application) System
+- Start interview with slash command (`/interview`)
+- 20 Hard RP questions, answered in 4 pages via modal
+- Answers are sent as an embed to the log channel for review
+- Answers are archived as JSON (only in file, not sent to channel)
+- When the interview is completed, the user is given a "waiting for approval" role and their old role is removed
+- Only users with a specific role can start the interview
 
-### ✅ Mülakat Onay Komutu
-- `/mülakatonay <kullanıcı_id>` komutu ile adminler kullanıcıya IC-ISIM rolü verir, bekleme rolünü alır
-- İşlem sonucu hem terminale hem de log kanalına yazılır
-- Yetkisiz kullanım, kullanıcı bulunamama ve rol işlemleri de loglanır
+### ✅ Interview Approval Command
+- Admins can give the IC-NAME role to a user and remove the waiting role with `/interviewapprove <user_id>`
+- The result is logged both in the terminal and the log channel
+- Unauthorized usage, user not found, and role operations are also logged
 
-### 🛡️ Moderasyon Komutları
-- Kullanıcı kayıt sistemi
-- Rol yönetimi (kayıtal, bayan, erkek, isim)
-- Mesaj temizleme (clear)
-- Kanal silme (kanalsil)
-- Avatar görüntüleme
+### 🛡️ Moderation Commands
+- User registration system
+- Role management (register, female, male, name)
+- Message clearing (clear)
+- Channel deletion (deletechannel)
+- View avatar
 
-### 🌐 Sunucu Yönetimi
-- Sunucu durumu bildirimleri (aktif, restart, bakım)
-- IP adresi paylaşımı
-- Ses kanalı yönetimi
+### 🌐 Server Management
+- Server status notifications (active, restart, maintenance)
+- IP address sharing
+- Voice channel management
 
-### 👥 Üye Yönetimi
-- Otomatik rol verme
-- Giriş/çıkış logları
-- Kayıt sistemi
+### 👥 Member Management
+- Automatic role assignment
+- Join/leave logs
+- Registration system
 
-## Kurulum
+## Installation
 
-1. **Gereksinimleri yükleyin:**
+1. **Install requirements:**
 ```bash
 pip install -r requirements.txt
 ```
 
-2. **Config dosyasını düzenleyin:**
-`config.json` dosyasındaki ayarları kendi sunucunuza göre güncelleyin.
+2. **Edit the config file:**
+Update the settings in `config.json` according to your server.
 
-3. **Botu çalıştırın:**
+3. **Run the bot:**
 ```bash
 python bot.py
 ```
 
-## Klasör Yapısı
+## Folder Structure
 
 ```
-titcket-bot/
-├── bot.py                 # Ana bot dosyası
-├── config.json           # Konfigürasyon dosyası
-├── requirements.txt      # Gerekli kütüphaneler
-├── README.md            # Bu dosya
-├── cogs/                # Komut modülleri
+ticket-bot/
+├── bot.py                 # Main bot file
+├── config.json            # Configuration file
+├── requirements.txt       # Required libraries
+├── README.md              # This file
+├── cogs/                  # Command modules
 │   ├── __init__.py
-│   ├── ticket_system.py    # Ticket sistemi komutları
-│   ├── server_commands.py  # Sunucu komutları
-│   ├── moderation_commands.py # Moderasyon komutları
-│   └── mulakat_system.py   # Mülakat sistemi ve onay komutu
-├── events/              # Event modülleri
+│   ├── ticket_system.py   # Ticket system commands
+│   ├── server_commands.py # Server commands
+│   ├── moderation_commands.py # Moderation commands
+│   └── interview_system.py    # Interview system and approval command
+├── events/                # Event modules
 │   ├── __init__.py
-│   ├── ready.py            # Bot hazır olduğunda
-│   └── member_events.py    # Üye eventleri
-├── utils/               # Yardımcı fonksiyonlar
+│   ├── ready.py           # When the bot is ready
+│   └── member_events.py   # Member events
+├── utils/                 # Helper functions
 │   ├── __init__.py
-│   └── helpers.py          # Genel yardımcı fonksiyonlar
-└── data/                # Ticket verileri
+│   └── helpers.py         # General helper functions
+└── data/                  # Ticket data
     └── *.json
-└── responses/           # Mülakat cevapları (JSON arşiv)
-    └── *_mulakat_final.json
+└── responses/             # Interview answers (JSON archive)
+    └── *_interview_final.json
 ```
 
-## Komutlar
+## Commands
 
-### Ticket Komutları
-- `/ticket` - Ticket sistemi embed'ini oluşturur
-- `/dataticket <user_id>` - Kullanıcının ticket transkriptini getirir
+### Ticket Commands
+- `/ticket` - Creates the ticket system embed
+- `/dataticket <user_id>` - Retrieves the user's ticket transcript
 
-### Mülakat Komutları
-- `/mülakat` - Mülakat (başvuru) sistemini başlatır (sadece belirli role sahip kullanıcılar)
-- `/mülakatonay <kullanıcı_id>` - Kullanıcıya IC-ISIM rolü verir, bekleme rolünü alır (sadece adminler)
+### Interview Commands
+- `/interview` - Starts the interview (application) system (only for users with a specific role)
+- `/interviewapprove <user_id>` - Gives the IC-NAME role to the user and removes the waiting role (admin only)
 
-### Sunucu Komutları
-- `/aktif` - Sunucu aktif durumunu bildirir
-- `/restart` - Sunucu restart durumunu bildirir
-- `/bakim` - Sunucu bakım durumunu bildirir
-- `/ip` - Sunucu IP adresini gösterir
+### Server Commands
+- `/active` - Announces server active status
+- `/restart` - Announces server restart status
+- `/maintenance` - Announces server maintenance status
+- `/ip` - Shows the server IP address
 
-### Moderasyon Komutları
-- `/kayital <user>` - Kullanıcıyı kayıt eder
-- `/bayan <user>` - Kullanıcıya bayan rolü verir
-- `/erkek <user>` - Kullanıcıya erkek rolü verir
-- `/isim <user> <new_name>` - Kullanıcının ismini değiştirir
-- `/avatar <user>` - Kullanıcının avatarını gösterir
-- `/clear <amount>` - Belirtilen sayıda mesaj siler
-- `/kanalsil <channel_name>` - Belirtilen isimdeki kanalı siler
-- `/join` - Ses kanalına katılır
-- `/leave` - Ses kanalından ayrılır
+### Moderation Commands
+- `/register <user>` - Registers the user
+- `/female <user>` - Gives the female role to the user
+- `/male <user>` - Gives the male role to the user
+- `/name <user> <new_name>` - Changes the user's name
+- `/avatar <user>` - Shows the user's avatar
+- `/clear <amount>` - Deletes the specified number of messages
+- `/deletechannel <channel_name>` - Deletes the channel with the specified name
+- `/join` - Joins the voice channel
+- `/leave` - Leaves the voice channel
 
-## Config Ayarları
+## Config Settings
 
-`config.json` dosyasında aşağıdaki ayarları yapılandırabilirsiniz:
+You can configure the following settings in `config.json`:
 
-- **Token**: Discord bot token'ı
-- **Prefix**: Komut öneki
-- **Rol ID'leri**: Admin, moderator, ticket kullanıcı rolleri, IC-ISIM rolü, mülakat bekleme rolü
-- **Kanal ID'leri**: Log, giriş, çıkış, kayıt, mülakat log kanalı
-- **Embed ayarları**: Renk, başlık, açıklama
-- **Ceza rolleri**: Uyarı, CK point, blacklist rolleri
-- **Sunucu bilgileri**: IP, Discord URL, resimler
-- **Mülakat soruları**: `mulakat_questions` listesi (20 adet)
-- **Mülakat log kanalı**: `mulakat_channel_id` (cevapların embed olarak gönderileceği kanal)
-- **Mülakat bekleme rolü**: `mulakat_role_to_add` (mülakat bitince verilecek rol)
-- **IC-ISIM rolü**: `/mülakatonay` ile verilecek rol (sabit: 1330578864396828682)
+- **Token**: Discord bot token
+- **Prefix**: Command prefix
+- **Role IDs**: Admin, moderator, ticket user roles, IC-NAME role, interview waiting role
+- **Channel IDs**: Log, join, leave, register, interview log channel
+- **Embed settings**: Color, title, description
+- **Penalty roles**: Warning, CK point, blacklist roles
+- **Server info**: IP, Discord URL, images
+- **Interview questions**: `interview_questions` list (20 items)
+- **Interview log channel**: `interview_channel_id` (channel where answers are sent as embed)
+- **Interview waiting role**: `interview_role_to_add` (role to be given after interview)
+- **IC-NAME role**: Role to be given with `/interviewapprove` (fixed: 1330578864396828682)
 
-## Loglama
+## Logging
 
-- `/mülakatonay` komutu ile yapılan tüm işlemler hem terminale hem de `1391725335263051806` ID'li log kanalına yazılır.
-- Başarı, hata, yetkisiz kullanım ve kullanıcı bulunamama durumları loglanır.
+- All operations performed with the `/interviewapprove` command are logged both in the terminal and in the log channel with ID `1391725335263051806`.
+- Success, error, unauthorized usage, and user not found situations are logged.
 
-## Geliştirme
+## Development
 
-### Yeni Komut Ekleme
-1. `cogs/` klasöründe yeni bir dosya oluşturun
-2. `commands.Cog` sınıfından türetin
-3. `setup()` fonksiyonu ekleyin
-4. Bot otomatik olarak yükleyecektir
+### Adding a New Command
+1. Create a new file in the `cogs/` folder
+2. Inherit from the `commands.Cog` class
+3. Add a `setup()` function
+4. The bot will automatically load it
 
-### Yeni Event Ekleme
-1. `events/` klasöründe yeni bir dosya oluşturun
-2. `commands.Cog` sınıfından türetin
-3. `@commands.Cog.listener()` decorator'ı kullanın
-4. `setup()` fonksiyonu ekleyin
+### Adding a New Event
+1. Create a new file in the `events/` folder
+2. Inherit from the `commands.Cog` class
+3. Use the `@commands.Cog.listener()` decorator
+4. Add a `setup()` function
 
-## Lisans
+## License
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+This project is licensed under the MIT license.
 
-## Destek
+## Support
 
-Herhangi bir sorun yaşarsanız, lütfen issue açın veya iletişime geçin. 
+If you have any issues, please open an issue or contact us. 
